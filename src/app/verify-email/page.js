@@ -21,7 +21,7 @@ export default function VerifyEmailPage() {
         setVerificationState({
           isLoading: false,
           isSuccess: false,
-          error: "Verification token is missing"
+          error: "ไม่พบรหัสยืนยัน"
         });
         return;
       }
@@ -34,7 +34,7 @@ export default function VerifyEmailPage() {
         const data = await response.json();
         
         if (!response.ok) {
-          throw new Error(data.message || "Failed to verify email");
+          throw new Error(data.message || "ไม่สามารถยืนยันอีเมลได้");
         }
         
         setVerificationState({
@@ -60,7 +60,7 @@ export default function VerifyEmailPage() {
         {verificationState.isLoading ? (
           <div className="text-center">
             <div className="w-16 h-16 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <h2 className="text-xl font-semibold text-gray-700">Verifying your email...</h2>
+            <h2 className="text-xl font-semibold text-gray-700">กำลังตรวจสอบยืนยันอีเมลของคุณ...</h2>
           </div>
         ) : verificationState.isSuccess ? (
           <div className="text-center">
@@ -69,15 +69,15 @@ export default function VerifyEmailPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Email Verified!</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">ยืนยันอีเมลสำเร็จ!</h2>
             <p className="text-gray-600 mb-6">
-              Your email has been successfully verified. You can now log in to your account.
+              อีเมลของคุณได้รับการยืนยันเรียบร้อยแล้ว คุณสามารถเข้าสู่ระบบได้ทันที
             </p>
             <Link 
               href="/login" 
               className="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
             >
-              Go to Login
+              ไปยังหน้าเข้าสู่ระบบ
             </Link>
           </div>
         ) : (
@@ -87,22 +87,22 @@ export default function VerifyEmailPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Verification Failed</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">การยืนยันล้มเหลว</h2>
             <p className="text-red-500 mb-6">
-              {verificationState.error || "Your verification link may have expired or is invalid."}
+              {verificationState.error || "ลิงก์ยืนยันอาจหมดอายุหรือไม่ถูกต้อง"}
             </p>
             <div className="space-y-4">
               <Link 
                 href="/register" 
                 className="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors w-full"
               >
-                Register Again
+                ลงทะเบียนอีกครั้ง
               </Link>
               <Link 
                 href="/login" 
                 className="inline-block bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors w-full"
               >
-                Back to Login
+                กลับไปยังหน้าเข้าสู่ระบบ
               </Link>
             </div>
           </div>

@@ -9,7 +9,7 @@ export async function GET(request) {
     
     if (!token) {
       return NextResponse.json(
-        { success: false, message: 'Verification token is missing' },
+        { success: false, message: 'ไม่พบรหัสยืนยัน' },
         { status: 400 }
       );
     }
@@ -26,13 +26,13 @@ export async function GET(request) {
     
     // สำเร็จ
     return NextResponse.json(
-      { success: true, message: 'Email verified successfully' },
+      { success: true, message: 'ยืนยันอีเมลสำเร็จ' },
       { status: 200 }
     );
   } catch (error) {
     console.error('Verification error:', error);
     return NextResponse.json(
-      { success: false, message: 'An error occurred during verification' },
+      { success: false, message: 'เกิดข้อผิดพลาดระหว่างการยืนยันอีเมล' },
       { status: 500 }
     );
   }

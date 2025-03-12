@@ -9,16 +9,16 @@ export default function RegisterPage() {
         <div className="relative hidden md:block bg-indigo-600">
           <Image 
             src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5"
-            alt="Registration Banner" 
-            layout="fill"
-            objectFit="cover"
+            alt="ภาพประกอบการลงทะเบียน" 
+            fill
+            sizes="50vw"
             priority
-            className="opacity-80"
+            className="object-cover opacity-80"
           />
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/70 to-blue-800/70 flex flex-col items-center justify-center text-white p-12">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4 animate-slideUp">Join Our Community</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-4 animate-slideUp">ยินดีต้อนรับสู่ระบบ</h1>
             <p className="text-lg md:text-xl opacity-90 text-center animate-slideUp" style={{ animationDelay: '150ms' }}>
-              Create an account to access exclusive features and get started with our services.
+              สร้างบัญชีผู้ใช้เพื่อเข้าถึงบริการของเราและเริ่มต้นใช้งานได้ทันที
             </p>
           </div>
         </div>

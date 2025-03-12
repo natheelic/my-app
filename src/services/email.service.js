@@ -1,8 +1,6 @@
 import nodemailer from 'nodemailer';
 
 // สร้าง transporter สำหรับส่งอีเมล
-// สำหรับการพัฒนา เราจะใช้ ethereal.email ซึ่งเป็นบริการทดสอบ
-// สำหรับการใช้งานจริง คุณต้องใช้บริการอีเมลจริง เช่น Gmail, SendGrid, Amazon SES
 export async function createTransporter() {
   // ใช้ ethereal.email สำหรับการทดสอบ
   const testAccount = await nodemailer.createTestAccount();
@@ -29,34 +27,34 @@ export async function sendVerificationEmail(user, verificationToken) {
     const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${verificationToken}`;
     
     const info = await transporter.sendMail({
-      from: '"Your App" <noreply@yourapp.com>',
+      from: '"ระบบสมัครสมาชิก" <noreply@yourapp.com>',
       to: user.email,
-      subject: 'Please verify your email address',
+      subject: 'กรุณายืนยันอีเมลของคุณ',
       text: `
-        Hello ${user.username},
+        สวัสดี ${user.username},
         
-        Thank you for registering. Please verify your email by clicking on the link below:
+        ขอบคุณสำหรับการลงทะเบียน กรุณายืนยันอีเมลของคุณโดยคลิกที่ลิงก์ด้านล่าง:
         
         ${verificationUrl}
         
-        This link will expire in 24 hours.
+        ลิงก์นี้จะหมดอายุภายใน 24 ชั่วโมง
         
-        If you did not create an account, you can safely ignore this email.
+        หากคุณไม่ได้สร้างบัญชีผู้ใช้นี้ กรุณาละเลยอีเมลนี้
       `,
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2>Email Verification</h2>
-          <p>Hello ${user.username},</p>
-          <p>Thank you for registering. Please verify your email by clicking on the button below:</p>
+        <div style="font-family: 'K2D', Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2>ยืนยันอีเมลของคุณ</h2>
+          <p>สวัสดี ${user.username},</p>
+          <p>ขอบคุณสำหรับการลงทะเบียน กรุณายืนยันอีเมลของคุณโดยคลิกที่ปุ่มด้านล่าง:</p>
           <div style="text-align: center; margin: 30px 0;">
             <a href="${verificationUrl}" style="background-color: #4F46E5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
-              Verify Email Address
+              ยืนยันอีเมล
             </a>
           </div>
-          <p>Or copy and paste this link into your browser:</p>
+          <p>หรือคัดลอกและวางลิงก์นี้ในเบราว์เซอร์ของคุณ:</p>
           <p style="word-break: break-all; color: #4F46E5;">${verificationUrl}</p>
-          <p>This link will expire in 24 hours.</p>
-          <p>If you did not create an account, you can safely ignore this email.</p>
+          <p>ลิงก์นี้จะหมดอายุภายใน 24 ชั่วโมง</p>
+          <p>หากคุณไม่ได้สร้างบัญชีผู้ใช้นี้ กรุณาละเลยอีเมลนี้
         </div>
       `,
     });
