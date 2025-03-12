@@ -35,12 +35,11 @@ export default function RegisterForm() {
       [name]: value
     }));
     
-    // Clear specific field error when user types
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
         [name]: null
-      }));
+      })); 
     }
   };
 
@@ -50,35 +49,35 @@ export default function RegisterForm() {
 
     // Username validation
     if (!formData.username.trim()) {
-      newErrors.username = "Username is required";
+      newErrors.username = "กรุณากรอกชื่อผู้ใช้";
       isValid = false;
     } else if (formData.username.length < 3) {
-      newErrors.username = "Username must be at least 3 characters";
+      newErrors.username = "ชื่อผู้ใช้ต้องมีอย่างน้อย 3 ตัวอักษร";
       isValid = false;
     }
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = "กรุณากรอกอีเมล";
       isValid = false;
     } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
+      newErrors.email = "กรุณากรอกอีเมลให้ถูกต้อง";
       isValid = false;
     }
 
     // Password validation
     if (!formData.password) {
-      newErrors.password = "Password is required";
+      newErrors.password = "กรุณากรอกรหัสผ่าน";
       isValid = false;
     } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
+      newErrors.password = "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร";
       isValid = false;
     }
 
     // Confirm password validation
     if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords don't match";
+      newErrors.confirmPassword = "รหัสผ่านไม่ตรงกัน";
       isValid = false;
     }
 
@@ -89,7 +88,6 @@ export default function RegisterForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Client-side validation
     if (!validateForm()) {
       return;
     }
@@ -103,15 +101,13 @@ export default function RegisterForm() {
         password: formData.password
       });
       
-      toast.success("Registration successful! Please check your email to verify your account.", {
+      toast.success("ลงทะเบียนสำเร็จ! กรุณาตรวจสอบอีเมลของคุณเพื่อยืนยันบัญชี", {
         duration: 6000,
       });
       
-      // แสดงหน้ายืนยันอีเมลแทนฟอร์ม
       setFormSubmitted(true);
       setEmailAddress(formData.email);
       
-      // Reset form after successful registration
       setFormData({
         username: "",
         email: "",
@@ -119,9 +115,8 @@ export default function RegisterForm() {
         confirmPassword: ""
       });
       
-      // ถ้าอยู่ในโหมดพัฒนา แสดงลิงก์ทดสอบการยืนยันอีเมล
       if (result.previewUrl) {
-        console.log('Email preview:', result.previewUrl);
+        console.log('ตัวอย่างอีเมล:', result.previewUrl);
       }
     } catch (error) {
       toast.error(error.message);
@@ -130,7 +125,6 @@ export default function RegisterForm() {
     }
   };
 
-  // ถ้าส่งฟอร์มสำเร็จ แสดงข้อความให้ตรวจสอบอีเมล
   if (formSubmitted) {
     return (
       <div className="w-full text-center">
@@ -140,9 +134,9 @@ export default function RegisterForm() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Check Your Email</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">กรุณาตรวจสอบอีเมล</h2>
           <p className="text-gray-600">
-            We've sent a verification link to <span className="font-medium">{emailAddress}</span>.
+            เราได้ส่งลิงก์ยืนยันไปยัง <span className="font-medium">{emailAddress}</span>
           </p>
         </div>
         
@@ -152,8 +146,8 @@ export default function RegisterForm() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <p className="text-sm">
-              Please click the verification link in the email to complete your registration.
-              The link will expire in 24 hours.
+              กรุณาคลิกลิงก์ยืนยันในอีเมลเพื่อดำเนินการลงทะเบียนให้เสร็จสมบูรณ์
+              ลิงก์จะหมดอายุภายใน 24 ชั่วโมง
             </p>
           </div>
         </div>
@@ -163,7 +157,7 @@ export default function RegisterForm() {
           variant="outline"
           fullWidth
         >
-          Go Back to Registration
+          กลับไปยังหน้าลงทะเบียน
         </Button>
       </div>
     );
@@ -172,20 +166,20 @@ export default function RegisterForm() {
   return (
     <div className="w-full">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold mb-2 text-gray-900">Create Account</h2>
-        <p className="text-gray-600">Join us today and start exploring</p>
+        <h2 className="text-3xl font-bold mb-2 text-gray-900">สร้างบัญชีผู้ใช้</h2>
+        <p className="text-gray-600">สมัครสมาชิกวันนี้และเริ่มใช้งานได้ทันที</p>
       </div>
       
       <form onSubmit={handleSubmit} className="space-y-5">
         <Input
           id="username"
           name="username"
-          label="Username"
+          label="ชื่อผู้ใช้"
           value={formData.username}
           onChange={handleChange}
           disabled={isLoading}
           required
-          placeholder="Enter your username"
+          placeholder="กรอกชื่อผู้ใช้"
           error={errors.username}
           icon={<UserIcon className="h-5 w-5" />}
         />
@@ -194,12 +188,12 @@ export default function RegisterForm() {
           id="email"
           name="email"
           type="email"
-          label="Email Address"
+          label="อีเมล"
           value={formData.email}
           onChange={handleChange}
           disabled={isLoading}
           required
-          placeholder="Enter your email"
+          placeholder="กรอกอีเมลของคุณ"
           error={errors.email}
           icon={<AtSymbolIcon className="h-5 w-5" />}
         />
@@ -209,12 +203,12 @@ export default function RegisterForm() {
             id="password"
             name="password"
             type={showPassword ? "text" : "password"}
-            label="Password"
+            label="รหัสผ่าน"
             value={formData.password}
             onChange={handleChange}
             disabled={isLoading}
             required
-            placeholder="Create a password"
+            placeholder="สร้างรหัสผ่าน"
             error={errors.password}
             icon={<LockClosedIcon className="h-5 w-5" />}
           />
@@ -235,12 +229,12 @@ export default function RegisterForm() {
             id="confirmPassword"
             name="confirmPassword"
             type={showPassword ? "text" : "password"}
-            label="Confirm Password"
+            label="ยืนยันรหัสผ่าน"
             value={formData.confirmPassword}
             onChange={handleChange}
             disabled={isLoading}
             required
-            placeholder="Confirm your password"
+            placeholder="ยืนยันรหัสผ่านของคุณ"
             error={errors.confirmPassword}
             icon={<LockClosedIcon className="h-5 w-5" />}
           />
@@ -263,26 +257,26 @@ export default function RegisterForm() {
             isLoading={isLoading}
             disabled={isLoading}
           >
-            Create Account
+            สร้างบัญชี
           </Button>
         </div>
         
         <div className="mt-4 text-center text-sm">
           <p className="text-gray-600">
-            Already have an account?{' '}
+            มีบัญชีผู้ใช้อยู่แล้ว?{' '}
             <Link href="/login" className="text-indigo-600 hover:text-indigo-800 font-medium transition-colors">
-              Sign in
+              เข้าสู่ระบบ
             </Link>
           </p>
           
           <p className="mt-3 text-xs text-gray-500">
-            By registering, you agree to our{' '}
+            การลงทะเบียนถือว่าคุณยอมรับ{' '}
             <Link href="/terms" className="text-indigo-600 hover:text-indigo-800">
-              Terms of Service
+              เงื่อนไขการใช้งาน
             </Link>{' '}
-            and{' '}
+            และ{' '}
             <Link href="/privacy" className="text-indigo-600 hover:text-indigo-800">
-              Privacy Policy
+              นโยบายความเป็นส่วนตัว
             </Link>
           </p>
         </div>

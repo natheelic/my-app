@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, K2D } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 
@@ -12,21 +12,28 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// กำหนดค่าฟอนต์ K2D สำหรับใช้งานทั้งเว็บไซต์
+const k2d = K2D({
+  weight: ['300', '400', '500', '600', '700'], // น้ำหนักฟอนต์ที่ต้องการใช้
+  subsets: ['latin', 'thai'], // กำหนด subsets เพื่อรองรับทั้งภาษาอังกฤษและไทย
+  variable: '--font-k2d',
+  display: 'swap',
+});
+
 export const metadata = {
-  title: "Next.js Authentication",
-  description: "Modern authentication system with Next.js",
+  title: "ระบบสมัครสมาชิก",
+  description: "ระบบสมัครสมาชิกที่ทันสมัยพร้อมการยืนยันอีเมล",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="th" className={k2d.variable}>
+      <body className="font-k2d antialiased">
         <Toaster
           position="top-center"
           reverseOrder={false}
           gutter={8}
           toastOptions={{
-            // Default toast styling
             duration: 4000,
             style: {
               background: '#363636',
@@ -34,8 +41,8 @@ export default function RootLayout({ children }) {
               borderRadius: '8px',
               padding: '12px 16px',
               boxShadow: '0 8px 16px rgba(0, 0, 0, 0.1)',
+              fontFamily: 'var(--font-k2d)', // ใช้ฟอนต์ K2D กับ toast ด้วย
             },
-            // Custom styling for different toast types
             success: {
               iconTheme: {
                 primary: '#22c55e',
