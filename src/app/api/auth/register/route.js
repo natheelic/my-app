@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
-import { userExists, createUser } from "@/services/user.service";
+import bcrypt from "bcrypt";
+import { userExists, createUser, generateVerificationToken, saveVerificationToken } from "@/services/user.service";
 import { hashPassword } from "@/utils/password";
 import { validateRegistration } from "@/utils/validation";
+import { sendVerificationEmail } from "@/services/email.service";
 
 export async function POST(request) {
   try {
@@ -29,20 +31,34 @@ export async function POST(request) {
     // Hash password
     const hashedPassword = await hashPassword(password);
 
-    // Create user
+    // Create user with default role and status
     const user = await createUser({
       username,
       email,
       password: hashedPassword,
+      role: 'USER',
+      status: 'PENDING',
+      isVerified: false,
     });
 
-    // Return the user without the password
+    // Generate verification token
+    const verificationToken = generateVerificationToken();
+    
+    // Save token in database
+    await saveVerificationToken(user.id, verificationToken);
+    
+    // Send verification email
+    const emailResult = await sendVerificationEmail(user, verificationToken);
+
+    // Return user without sensitive information
     const { password: _, ...userWithoutPassword } = user;
 
     return NextResponse.json(
       {
-        message: "User registered successfully",
+        message: "Registration successful! Please check your email to verify your account.",
         user: userWithoutPassword,
+        emailSent: emailResult.success,
+        previewUrl: process.env.NODE_ENV === 'development' ? emailResult.previewUrl : undefined
       },
       { status: 201 }
     );
