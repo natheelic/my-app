@@ -1,0 +1,33 @@
+import LoginForm from "@/components/auth/LoginForm";
+import Image from "next/image";
+
+export default function LoginPage() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4 sm:p-6 md:p-8">
+      <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 shadow-2xl rounded-2xl overflow-hidden bg-white animate-fadeIn">
+        {/* Left side - Image */}
+        <div className="relative hidden md:block bg-indigo-600">
+          <Image 
+            src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
+            alt="ภาพประกอบการเข้าสู่ระบบ" 
+            fill
+            sizes="50vw"
+            priority
+            className="object-cover opacity-80"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/70 to-blue-800/70 flex flex-col items-center justify-center text-white p-12">
+            <h1 className="font-k2d text-3xl md:text-4xl font-bold mb-4 animate-slideUp thai-text">ยินดีต้อนรับกลับ</h1>
+            <p className="font-k2d text-lg md:text-xl opacity-90 text-center animate-slideUp thai-text" style={{ animationDelay: '150ms' }}>
+              เข้าสู่ระบบเพื่อจัดการบัญชีและเข้าถึงบริการของเรา
+            </p>
+          </div>
+        </div>
+        
+        {/* Right side - Form */}
+        <div className="py-8 px-6 sm:px-12 animate-slideUp" style={{ animationDelay: '300ms' }}>
+          <LoginForm />
+        </div>
+      </div>
+    </div>
+  );
+}
