@@ -25,6 +25,9 @@ export default function RegisterForm() {
     confirmPassword: null
   });
 
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [emailAddress, setEmailAddress] = useState("");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -100,14 +103,13 @@ export default function RegisterForm() {
         password: formData.password
       });
       
-      toast.success("Registration successful! You can now log in.", {
-        style: {
-          borderRadius: '10px',
-          background: '#333',
-          color: '#fff',
-        },
-        duration: 5000,
+      toast.success("Registration successful! Please check your email to verify your account.", {
+        duration: 6000,
       });
+      
+      // แสดงหน้ายืนยันอีเมลแทนฟอร์ม
+      setFormSubmitted(true);
+      setEmailAddress(formData.email);
       
       // Reset form after successful registration
       setFormData({
@@ -116,18 +118,56 @@ export default function RegisterForm() {
         password: "",
         confirmPassword: ""
       });
+      
+      // ถ้าอยู่ในโหมดพัฒนา แสดงลิงก์ทดสอบการยืนยันอีเมล
+      if (result.previewUrl) {
+        console.log('Email preview:', result.previewUrl);
+      }
     } catch (error) {
-      toast.error(error.message, {
-        style: {
-          borderRadius: '10px',
-          background: '#333',
-          color: '#fff',
-        },
-      });
+      toast.error(error.message);
     } finally {
       setIsLoading(false);
     }
   };
+
+  // ถ้าส่งฟอร์มสำเร็จ แสดงข้อความให้ตรวจสอบอีเมล
+  if (formSubmitted) {
+    return (
+      <div className="w-full text-center">
+        <div className="mb-6">
+          <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Check Your Email</h2>
+          <p className="text-gray-600">
+            We've sent a verification link to <span className="font-medium">{emailAddress}</span>.
+          </p>
+        </div>
+        
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-blue-700 text-left mb-6">
+          <div className="flex">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="text-sm">
+              Please click the verification link in the email to complete your registration.
+              The link will expire in 24 hours.
+            </p>
+          </div>
+        </div>
+        
+        <Button
+          onClick={() => setFormSubmitted(false)}
+          variant="outline"
+          fullWidth
+        >
+          Go Back to Registration
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
