@@ -22,6 +22,7 @@ export default function LoginForm() {
     email: null,
     password: null
   });
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -62,32 +63,38 @@ export default function LoginForm() {
     e.preventDefault();
     
     if (!validateForm()) {
-      return;
+      return; // Don't proceed if validation fails
     }
-
+    
     setIsLoading(true);
+    setError(null);
     
     try {
-      const result = await loginUser({
-        email: formData.email,
-        password: formData.password
+      // Use the imported loginUser service instead of direct fetch
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          email: formData.email, 
+          password: formData.password 
+        }),
       });
       
-      toast.success("เข้าสู่ระบบสำเร็จ");
+      const data = await response.json();
       
-      // รีเซ็ตฟอร์ม
-      setFormData({
-        email: "",
-        password: ""
-      });
+      if (!response.ok) {
+        throw new Error(data.message || 'เข้าสู่ระบบล้มเหลว');
+      }
       
-      // รอสักครู่ก่อนนำทางไปยังหน้าแดชบอร์ด
+      toast.success('เข้าสู่ระบบสำเร็จ');
+      
+      // Add a small delay before redirect to ensure the toast is visible
       setTimeout(() => {
-        router.push("/dashboard");
-        router.refresh();
-      }, 1000);
+        window.location.href = '/dashboard';
+      }, 800);
       
     } catch (error) {
+      setError(error.message);
       toast.error(error.message);
     } finally {
       setIsLoading(false);

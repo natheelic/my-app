@@ -2,9 +2,12 @@ import { getServerSession } from "@/utils/auth";
 import { redirect } from "next/navigation";
 
 export default function DashboardPage() {
+  // Add console logs for debugging
   const session = getServerSession();
+  console.log("Dashboard session:", session);
   
   if (!session) {
+    console.log("No session found, redirecting to login");
     redirect("/login");
   }
   

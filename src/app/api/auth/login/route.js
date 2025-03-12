@@ -52,19 +52,26 @@ export async function POST(request) {
       );
     }
 
+    // ส่งข้อมูลผู้ใช้กลับโดยไม่มีข้อมูลที่อ่อนไหว
+    const { password: _, ...userWithoutPassword } = user;
+
     // สร้าง token
     const token = createToken(user);
+    const response = NextResponse.json({
+      message: 'เข้าสู่ระบบสำเร็จ',
+      user: userWithoutPassword
+    });
 
-    // บันทึก token ใน HTTP-only cookie
-    const cookieOptions = {
+    // Set cookie properly
+    response.cookies.set({
+      name: 'token',
+      value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 86400, // 1 วัน
-      path: '/'
-    };
-
-    cookies().set('token', token, cookieOptions);
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 60 * 60 * 24 // 1 day
+    });
 
     // ปรับสถานะเป็น ACTIVE หากเป็น PENDING
     if (user.status === 'PENDING') {
@@ -74,13 +81,7 @@ export async function POST(request) {
       });
     }
 
-    // ส่งข้อมูลผู้ใช้กลับโดยไม่มีข้อมูลที่อ่อนไหว
-    const { password: _, ...userWithoutPassword } = user;
-
-    return NextResponse.json({
-      message: 'เข้าสู่ระบบสำเร็จ',
-      user: userWithoutPassword
-    });
+    return response;
     
   } catch (error) {
     console.error('Login error:', error);
